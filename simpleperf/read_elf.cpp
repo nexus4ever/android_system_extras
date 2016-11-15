@@ -167,7 +167,7 @@ static BinaryRet OpenObjectFile(const std::string& filename, uint64_t file_offse
   auto binary_or_err = llvm::object::createBinary(buffer_or_err.get()->getMemBufferRef());
   if (!binary_or_err) {
     LOG(ERROR) << filename << " [" << file_offset << "-" << (file_offset + file_size)
-        << "] is not a binary file: " << binary_or_err.getError().message();
+        << "] is not a binary file: " << llvm::toString(binary_or_err.takeError());
     return ret;
   }
   ret.binary = llvm::object::OwningBinary<llvm::object::Binary>(std::move(binary_or_err.get()),
